@@ -1,0 +1,136 @@
+#include <stdio.h>
+
+#define MAX_CANDIDATES 12
+#define MAX_VOTES 500000
+
+int main(void)
+{
+    int votes[MAX_VOTES];
+    int count[MAX_CANDIDATES + 1] = {0};
+    int candidate[MAX_CANDIDATES];
+    int candidate_votes[MAX_CANDIDATES];
+
+    int n, c;
+    int valid = 0, invalid = 0;
+
+    printf("Enter number of candidates (1-12): ");
+
+    if (scanf("%d", &c) != 1 ||
+        c < 1 || c > MAX_CANDIDATES) {
+        printf("Invalid candidate count.\n");
+        return 1;
+    }
+
+    printf("Enter number of votes (1-500000): ");
+
+    if (scanf("%d", &n) != 1 ||
+        n < 1 || n > MAX_VOTES) {
+        printf("Invalid vote count.\n");
+        return 1;
+    }
+
+    printf("Enter candidate number for each vote:\n");
+
+    for (int i = 0; i < n; i++) {
+        if (scanf("%d", &votes[i]) != 1) {
+            printf("Invalid input.\n");
+            return 1;
+        }
+
+        if (votes[i] >= 1 && votes[i] <= c) {
+            count[votes[i]]++;
+            valid++;
+        } else {
+            invalid++;
+        }
+    }
+
+    printf("\nELECTION RESULTS\n");
+
+    printf("Valid votes: %d\n", valid);
+    printf("Invalid votes: %d\n", invalid);
+
+    for (int i = 0; i < c; i++) {
+        candidate[i] = i + 1;
+        candidate_votes[i] = count[i + 1];
+    }
+
+    /* Sort candidates by descending vote count */
+
+    for (int i = 0; i < c - 1; i++) {
+        for (int j = 0; j < c - i - 1; j++) {
+
+            if (candidate_votes[j] <
+                candidate_votes[j + 1]) {
+
+                int temp = candidate_votes[j];
+                candidate_votes[j] = candidate_votes[j + 1];
+                candidate_votes[j + 1] = temp;
+
+                temp = candidate[j];
+                candidate[j] = candidate[j + 1];
+                candidate[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\nCANDIDATE RESULTS:\n");
+
+    for (int i = 0; i < c; i++) {
+        printf("Candidate %d: %d votes\n",
+               candidate[i], candidate_votes[i]);
+    }
+
+    int winner_votes = candidate_votes[0];
+    int tied = 0;
+
+    for (int i = 1; i < c; i++) {
+        if (candidate_votes[i] == winner_votes)
+            tied = 1;
+    }
+
+    if (winner_votes == 0) {
+        printf("\nNo valid votes were recorded.\n");
+    } else if (tied) {
+        printf("\nElection result: TIE\n");
+        printf("Leading candidates:\n");
+
+        for (int i = 0; i < c; i++) {
+            if (candidate_votes[i] == winner_votes)
+                printf("Candidate %d\n", candidate[i]);
+        }
+    } else {
+        printf("\nWinner: Candidate %d\n", candidate[0]);
+        printf("Votes received: %d\n", winner_votes);
+    }
+
+    return 0;
+}
+
+Compilation:
+gcc Q7.c -o Q7
+./Q7
+Input :
+Enter number of candidates (1-12): 3
+Enter number of votes (1-500000): 8
+Enter candidate number for each vote:
+1
+2
+1
+3
+2
+1
+0
+5
+Output :
+ELECTION RESULTS
+Valid votes: 6
+Invalid votes: 2
+
+CANDIDATE RESULTS:
+Candidate 1: 3 votes
+Candidate 2: 2 votes
+Candidate 3: 1 votes
+
+Winner: Candidate 1
+Votes received: 3
