@@ -132,3 +132,18 @@ int main(void)
 
     return 0;
 }
+expected ouput
+ORIGINAL REGISTER:
+45 12 67 23 10 56
+
+BUBBLE SORT:
+10 12 23 45 56 67
+Comparisons: 15, Swaps: 8
+
+SELECTION SORT:
+10 12 23 45 56 67
+Comparisons: 15, Swaps: 3
+
+INSERTION SORT:
+10 12 23 45 56 67
+Comparisons: 10, Shifts: 7
