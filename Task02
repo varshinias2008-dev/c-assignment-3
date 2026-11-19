@@ -1,0 +1,117 @@
+#include <stdio.h>
+
+void display(int a[], int n)
+{
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+
+    printf("\n");
+}
+
+void bubble_sort(int a[], int n, int *comp, int *swaps)
+{
+    *comp = 0;
+    *swaps = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        int swapped = 0;
+
+        for (int j = 0; j < n - i - 1; j++) {
+            (*comp)++;
+
+            if (a[j] > a[j + 1]) {
+                int temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+
+                (*swaps)++;
+                swapped = 1;
+            }
+        }
+
+        if (!swapped)
+            break;
+    }
+}
+
+void selection_sort(int a[], int n, int *comp, int *swaps)
+{
+    *comp = 0;
+    *swaps = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        int min = i;
+
+        for (int j = i + 1; j < n; j++) {
+            (*comp)++;
+
+            if (a[j] < a[min])
+                min = j;
+        }
+
+        if (min != i) {
+            int temp = a[i];
+            a[i] = a[min];
+            a[min] = temp;
+            (*swaps)++;
+        }
+    }
+}
+
+void insertion_sort(int a[], int n, int *comp, int *shifts)
+{
+    *comp = 0;
+    *shifts = 0;
+
+    for (int i = 1; i < n; i++) {
+        int key = a[i];
+        int j = i - 1;
+
+        while (j >= 0) {
+            (*comp)++;
+
+            if (a[j] > key) {
+                a[j + 1] = a[j];
+                (*shifts)++;
+                j--;
+            } else {
+                break;
+            }
+        }
+
+        a[j + 1] = key;
+    }
+}
+
+int main(void)
+{
+    int original[] = {45, 12, 67, 23, 10, 56};
+    int a[6], b[6], c[6];
+    int comp, operations;
+
+    for (int i = 0; i < 6; i++) {
+        a[i] = original[i];
+        b[i] = original[i];
+        c[i] = original[i];
+    }
+
+    printf("ORIGINAL REGISTER:\n");
+    display(original, 6);
+
+    bubble_sort(a, 6, &comp, &operations);
+    printf("\nBUBBLE SORT:\n");
+    display(a, 6);
+    printf("Comparisons: %d, Swaps: %d\n", comp, operations);
+
+    selection_sort(b, 6, &comp, &operations);
+    printf("\nSELECTION SORT:\n");
+    display(b, 6);
+    printf("Comparisons: %d, Swaps: %d\n", comp, operations);
+
+    insertion_sort(c, 6, &comp, &operations);
+    printf("\nINSERTION SORT:\n");
+    display(c, 6);
+    printf("Comparisons: %d, Shifts: %d\n", comp, operations);
+
+    return 0;
+}
