@@ -1,5 +1,22 @@
 #include <stdio.h>
 
+/* Expected output:
+ORIGINAL REGISTER:
+45 12 67 23 10 56
+
+BUBBLE SORT:
+10 12 23 45 56 67
+Comparisons: 15, Swaps: 8
+
+SELECTION SORT:
+10 12 23 45 56 67
+Comparisons: 15, Swaps: 4
+
+INSERTION SORT:
+10 12 23 45 56 67
+Comparisons: 11, Shifts: 8
+*/
+
 void display(int a[], int n)
 {
     for (int i = 0; i < n; i++)
