@@ -1,0 +1,160 @@
+#include <stdio.h>
+
+#define DISTRICTS 38
+#define MONTHS 12
+
+void read_rainfall(double rain[DISTRICTS][MONTHS])
+{
+    for (int i = 0; i < DISTRICTS; i++) {
+        printf("\nEnter rainfall for District %d:\n", i + 1);
+
+        for (int j = 0; j < MONTHS; j++) {
+            do {
+                printf("Month %d: ", j + 1);
+
+                if (scanf("%lf", &rain[i][j]) != 1) {
+                    printf("Invalid input.\n");
+                    return;
+                }
+
+                if (rain[i][j] < 0)
+                    printf("Rainfall cannot be negative.\n");
+
+            } while (rain[i][j] < 0);
+        }
+    }
+}
+
+void annual_totals(double rain[DISTRICTS][MONTHS])
+{
+    printf("\nANNUAL RAINFALL TOTALS\n");
+
+    for (int i = 0; i < DISTRICTS; i++) {
+        double total = 0;
+
+        for (int j = 0; j < MONTHS; j++)
+            total += rain[i][j];
+
+        printf("District %d: %.2f mm\n", i + 1, total);
+    }
+}
+
+void monthly_averages(double rain[DISTRICTS][MONTHS])
+{
+    printf("\nMONTHLY STATE AVERAGES\n");
+
+    for (int j = 0; j < MONTHS; j++) {
+        double total = 0;
+
+        for (int i = 0; i < DISTRICTS; i++)
+            total += rain[i][j];
+
+        printf("Month %d: %.2f mm\n",
+               j + 1, total / DISTRICTS);
+    }
+}
+
+void maximum_rainfall(double rain[DISTRICTS][MONTHS])
+{
+    double maximum = rain[0][0];
+    int district = 0, month = 0;
+
+    for (int i = 0; i < DISTRICTS; i++) {
+        for (int j = 0; j < MONTHS; j++) {
+            if (rain[i][j] > maximum) {
+                maximum = rain[i][j];
+                district = i;
+                month = j;
+            }
+        }
+    }
+
+    printf("\nWETTEST DISTRICT-MONTH\n");
+    printf("District: %d\n", district + 1);
+    printf("Month: %d\n", month + 1);
+    printf("Rainfall: %.2f mm\n", maximum);
+}
+
+void deficient_districts(double rain[DISTRICTS][MONTHS])
+{
+    double total = 0;
+
+    for (int i = 0; i < DISTRICTS; i++)
+        for (int j = 0; j < MONTHS; j++)
+            total += rain[i][j];
+
+    double state_average = total / (DISTRICTS * MONTHS);
+
+    printf("\nSTATE AVERAGE: %.2f mm\n", state_average);
+    printf("DISTRICTS BELOW 60%% OF STATE AVERAGE:\n");
+
+    for (int i = 0; i < DISTRICTS; i++) {
+        double annual = 0;
+
+        for (int j = 0; j < MONTHS; j++)
+            annual += rain[i][j];
+
+        if (annual / MONTHS < 0.60 * state_average)
+            printf("District %d\n", i + 1);
+    }
+}
+
+int main(void)
+{
+    double rain[DISTRICTS][MONTHS];
+
+    read_rainfall(rain);
+    annual_totals(rain);
+    monthly_averages(rain);
+    maximum_rainfall(rain);
+    deficient_districts(rain);
+
+    return 0;
+}
+Compilation:
+bash :gcc Q4.c -o Q4
+./Q4
+output
+Enter rainfall for District 1:
+Month 1: 100
+Month 2: 100
+Month 3: 100
+...
+Month 12: 100
+
+Enter rainfall for District 2:
+Month 1: 100
+...
+Month 12: 100
+
+(Repeat the same input for all 38 districts)
+
+ANNUAL RAINFALL TOTALS
+District 1: 1200.00 mm
+District 2: 1200.00 mm
+District 3: 1200.00 mm
+District 4: 1200.00 mm
+...
+District 38: 1200.00 mm
+
+MONTHLY STATE AVERAGES
+Month 1: 100.00 mm
+Month 2: 100.00 mm
+Month 3: 100.00 mm
+Month 4: 100.00 mm
+Month 5: 100.00 mm
+Month 6: 100.00 mm
+Month 7: 100.00 mm
+Month 8: 100.00 mm
+Month 9: 100.00 mm
+Month 10: 100.00 mm
+Month 11: 100.00 mm
+Month 12: 100.00 mm
+
+WETTEST DISTRICT-MONTH
+District: 1
+Month: 1
+Rainfall: 100.00 mm
+
+STATE AVERAGE: 100.00 mm
+DISTRICTS BELOW 60% OF STATE AVERAGE:
