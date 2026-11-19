@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int word_count(const char s[])
+{
+    int count = 0;
+    int inside = 0;
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (isspace((unsigned char)s[i])) {
+            inside = 0;
+        } else if (!inside) {
+            count++;
+            inside = 1;
+        }
+    }
+
+    return count;
+}
+
+void uppercase(char s[])
+{
+    for (int i = 0; s[i] != '\0'; i++)
+        s[i] = (char)toupper((unsigned char)s[i]);
+}
+
+void reverse_string(char s[])
+{
+    int left = 0;
+    int right = (int)strlen(s) - 1;
+
+    while (left < right) {
+        char temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+
+        left++;
+        right--;
+    }
+}
+
+int is_palindrome(const char s[])
+{
+    int left = 0;
+    int right = (int)strlen(s) - 1;
+
+    while (left < right) {
+        while (left < right &&
+               !isalpha((unsigned char)s[left]))
+            left++;
+
+        while (left < right &&
+               !isalpha((unsigned char)s[right]))
+            right--;
+
+        if (tolower((unsigned char)s[left]) !=
+            tolower((unsigned char)s[right]))
+            return 0;
+
+        left++;
+        right--;
+    }
+
+    return 1;
+}
+
+int main(void)
+{
+    char message[200];
+    char copy[200];
+
+    printf("Enter a message: ");
+
+    if (fgets(message, sizeof(message), stdin) == NULL)
+        return 1;
+
+    message[strcspn(message, "\n")] = '\0';
+
+    printf("\nWORD COUNT: %d\n", word_count(message));
+
+    strcpy(copy, message);
+    uppercase(copy);
+
+    printf("UPPERCASE: %s\n", copy);
+
+    strcpy(copy, message);
+    reverse_string(copy);
+
+    printf("REVERSED: %s\n", copy);
+
+    printf("PALINDROME: %s\n",
+           is_palindrome(message) ? "YES" : "NO");
+
+    printf("\nLIBRARY FUNCTION DEMONSTRATION\n");
+
+    printf("Length: %zu\n", strlen(message));
+
+    char second[200];
+    snprintf(second, sizeof(second), "%s", message);
+
+    printf("Copied string: %s\n", second);
+
+    return 0;
+}
+Compilation
+:gcc Q5.c -o Q5
+./Q5
+Output : 
+WORD COUNT: 3
+UPPERCASE: MADAM, I'M ADAM
+REVERSED: madA m'I ,madaM
+PALINDROME: YES
